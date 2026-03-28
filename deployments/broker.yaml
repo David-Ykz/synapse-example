@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: broker-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: synapse-broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: broker
+  template:
+    metadata:
+      labels:
+        app: broker
+    spec:
+      containers:
+      - name: broker
+        image: synapse-broker:latest
+        imagePullPolicy: Never
+        env:
+        - name: BROKER_PORT
+          value: "8080"
+        - name: BROKER_FILEPATH
+          value: "/data"
+        - name: BROKER_BUFFER_SIZE
+          value: "1024"
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: data
+        hostPath:
+          path: /tmp/synapse-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: synapse-broker-service
+spec:
+  selector:
+    app: broker
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

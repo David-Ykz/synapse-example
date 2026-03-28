@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: synapse-example
+  labels:
+    app: synapse-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: synapse-client
+  template:
+    metadata:
+      labels:
+        app: synapse-client
+    spec:
+      containers:
+      - name: main-container
+        image: synapse-example:latest       
+        imagePullPolicy: Never   
+        env:
+        - name: BROKER_HOST
+          value: "synapse-broker-service" 
+        - name: BROKER_PORT
+          value: "8080"
+        ports:
+        - containerPort: 8080
