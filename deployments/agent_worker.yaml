@@ -1,3 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-worker-config
+data:
+  flights_api_input.json: |
+    {
+      "name": "get_flights",
+      "description": "Get a list of flights between 2 airports",
+      "parameters": {
+        "type": "OBJECT",
+        "properties": {
+          "departure": {
+              "type": "STRING",
+              "description": "The IATA code for the departure airport"
+          },
+          "arrival": {
+            "type": "STRING",
+            "description": "The IATA code for the arrival airport"        
+          }
+        },
+        "required": ["departure", "arrival"]
+      }
+    }
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5,7 +32,7 @@ metadata:
   labels:
     app: synapse-worker
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: synapse-worker
@@ -17,6 +44,9 @@ spec:
       containers:
       - name: agent-worker
         image: synapse-agent-worker:latest 
+        volumeMounts:
+          - name: tool-config-volume
+            mountPath: /etc/configs
         imagePullPolicy: Never
         env:
         - name: BROKER_HOST
@@ -27,6 +57,18 @@ spec:
           value: "example-input"
         - name: PRODUCER_NAMESPACE
           value: "agent-worker-output"
+        - name: LLM_MODEL_NAME
+          value: "gemini-2.5-flash"
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: llm-api-key
+              key: GEMINI_API_KEY
+        - name: TOOL_CONFIG_DIR
+          value: "/etc/configs"
+        - name: HANDLER_URL
+          value: "synapse-handler-service:8000"
+        
         resources:
           requests:
             cpu: "100m"
@@ -34,3 +76,7 @@ spec:
           limits:
             cpu: "500m"
             memory: "256Mi"
+      volumes:
+        - name: tool-config-volume
+          configMap:
+            name: agent-worker-config

@@ -41,8 +41,8 @@ spec:
           mountPath: /data
       volumes:
       - name: data
-        hostPath:
-          path: /tmp/synapse-data
+        persistentVolumeClaim:
+          claimName: broker-data-pvc
 ---
 apiVersion: v1
 kind: Service

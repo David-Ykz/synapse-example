@@ -5,7 +5,6 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"fmt"
 
 	"github.com/David-Ykz/synapse/client"
 	"github.com/David-Ykz/synapse/common"
@@ -39,9 +38,13 @@ func main() {
 
 	counter := 0
 	for {
-		message := fmt.Sprintf("Hello World: %d", counter)
-		producer.Produce([]byte(message))
-		time.Sleep(100 * time.Millisecond)
-		counter += 1
+		if counter < 1 {
+			// message := fmt.Sprintf("What is %d squared", counter)
+			message := "How do i get from toronto to san francisco. Use the function call"
+			producer.Produce([]byte(message))
+			// time.Sleep(100 * time.Millisecond)
+			time.Sleep(1 * time.Second)
+			counter += 1
+		}
 	}
 }

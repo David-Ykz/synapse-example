@@ -1,4 +1,4 @@
-module github.com/kzdavid/synapse-example
+module synapse-example
 
 go 1.25.6
 
