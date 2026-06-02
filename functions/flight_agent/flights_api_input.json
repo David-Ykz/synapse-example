@@ -1,0 +1,18 @@
+{
+    "name": "get_flights",
+    "description": "Get a list of flights between 2 airports",
+    "parameters": {
+        "type": "OBJECT",
+        "properties": {
+            "departure": {
+                "type": "STRING",
+                "description": "The IATA code for the departure airport"
+            },
+            "arrival": {
+                "type": "STRING",
+                "description": "The IATA code for the arrival airport"        
+            }
+        },
+        "required": ["departure", "arrival"]
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "name": "get_restaurants",
+    "description": "Get a list of restaurants in a given city",
+    "parameters": {
+        "type": "OBJECT",
+        "properties": {
+            "city": {
+                "type": "STRING",
+                "description": "The city to search restaurants in"
+            },
+            "country": {
+                "type": "STRING",
+                "description": "The country which the city is in"
+            }
+        },
+        "required": ["city", "country"]
+    }
+}

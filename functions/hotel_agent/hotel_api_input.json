@@ -1,0 +1,18 @@
+{
+    "name": "get_hotels",
+    "description": "Get a list of hotels in a given city",
+    "parameters": {
+        "type": "OBJECT",
+        "properties": {
+            "city": {
+                "type": "STRING",
+                "description": "The city to search hotels in"
+            },
+            "country": {
+                "type": "STRING",
+                "description": "The country which the city is in"
+            }
+        },
+        "required": ["city", "country"]
+    }
+}

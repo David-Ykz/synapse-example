@@ -1,0 +1,18 @@
+models:
+  model1:
+    name: "gemini-2.5-flash"
+agents:
+  hotel_agent:
+    input_namespace: hotels
+    output_namespace: completed
+    replicas: 1
+    model: model1
+    tools_dir: ./tools/hotels/
+    handler_url: "synapse-hotels-handler:8000"
+  flight_agent:
+    input_namespace: flights
+    output_namespace: completed
+    replicas: 2
+    model: model1
+    tools_dir: ./tools/flights/
+    handler_url: "synapse-flights-handler:8000"
